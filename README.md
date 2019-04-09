@@ -2,7 +2,7 @@
 
 > Draxis Plugin
 
-![alt text](http://url/to/img.png)
+![alt text](https://raw.githubusercontent.com/CUTLER-H2020/Draxis-map-layers-kibana-plugin/master/draxis_map.png)
 
 ---
 
