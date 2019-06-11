@@ -9,6 +9,8 @@ require('./scripts/core');
 require('./scripts/charts');
 require('./scripts/leaflet-measurement');
 const parkings = require('./helpers/parkings');
+const landscapes = require('./helpers/landscape.js');
+const landscapesColors = require('./helpers/landscapeLegend.js');
 // didn't already
 const module = uiModules.get('kibana/draxis_map', ['kibana']);
 
@@ -17,6 +19,7 @@ const module = uiModules.get('kibana/draxis_map', ['kibana']);
 module.controller('KbnMapVisController', function(
   $scope,
   $element,
+  $rootScope,
   $timeout,
   Private
 ) {
@@ -27,19 +30,26 @@ module.controller('KbnMapVisController', function(
   });
 
   $scope.addLegendToMap = eventLayer => {
-    if ($scope.legend) $scope.legend.remove();
-    $scope.legend = L.control({ position: 'bottomright' });
-    $scope.currentLegend = eventLayer;
-    $scope.legend.onAdd = function(map) {
-      var div = L.DomUtil.create('div', 'info legend');
-      div.innerHTML = `<img src="${
-        eventLayer.layer._url
-      }service=WMS&version=1.1.0&request=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=${
-        eventLayer.layer.options.layers
-      }" />`;
-      return div;
-    };
-    if (eventLayer.layer.options.layers) $scope.legend.addTo($scope.map);
+    if (
+      eventLayer &&
+      eventLayer.layer._url &&
+      eventLayer.layer._url.indexOf('floodinfo.ie') == -1
+    ) {
+      if ($scope.legend) $scope.legend.remove();
+      $scope.legend = L.control({ position: 'bottomright' });
+      $scope.currentLegend = eventLayer;
+      $scope.legend.onAdd = function(map) {
+        var div = L.DomUtil.create('div', 'info legend');
+
+        div.innerHTML = `<img src="${
+          eventLayer.layer._url
+        }service=WMS&version=1.1.0&request=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=${
+          eventLayer.layer.options.layers
+        }" />`;
+        return div;
+      };
+      if (eventLayer.layer.options.layers) $scope.legend.addTo($scope.map);
+    }
   };
 
   $scope.removeCurrentLegentFromMap = eventLayer => {
@@ -55,14 +65,15 @@ module.controller('KbnMapVisController', function(
   };
 
   $timeout(function() {
+    $scope.showLandscapeLegend = false;
+
     $scope.map = L.map('map', {
       measureControl: true
     }).setView([53.4180764, -8.6549656], 6);
     L.tileLayer(
       'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoicm9hbWRlZiIsImEiOiJjanBpOGRjOW4wZ2p5M3ZrZ2huZ3ZmcHByIn0.GaNQw_G3SjdXA7inA1hzfQ',
       {
-        attribution:
-          'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        attribution: 'Draxis Maps',
         maxZoom: 18,
         id: 'mapbox.streets',
         accessToken: 'your.mapbox.access.token'
@@ -85,12 +96,29 @@ module.controller('KbnMapVisController', function(
       // $scope.map.fitBounds(polygon.getBounds());
     });
 
+    var landscapeGroup = new L.FeatureGroup();
+    $scope.map.addLayer(landscapeGroup);
+    $scope.landscapesColors = landscapesColors;
+    landscapes.features.map(feature => {
+      const selectedLegend = landscapesColors[feature.properties.TYPE];
+      const coords = feature.geometry.coordinates[0][0].map(v => {
+        return [v[1], v[0]];
+      });
+
+      var polygon = L.polygon(coords, {
+        color: selectedLegend.color
+      }).addTo($scope.map);
+
+      landscapeGroup.addLayer(polygon);
+    });
+
     var wmsLayer = L.tileLayer
       .wms('http://gis-stg.epa.ie/geoserver/EPA/wms?', {
         layers: 'EPA:PROT_SAC',
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer2 = L.tileLayer
@@ -99,6 +127,7 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer3 = L.tileLayer
@@ -107,6 +136,7 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer4 = L.tileLayer
@@ -115,6 +145,7 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer5 = L.tileLayer
@@ -123,6 +154,7 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer6 = L.tileLayer
@@ -131,6 +163,7 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer7 = L.tileLayer
@@ -139,6 +172,7 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer8 = L.tileLayer
@@ -147,6 +181,7 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer9 = L.tileLayer
@@ -156,6 +191,7 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer10 = L.tileLayer
@@ -165,6 +201,7 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer11 = L.tileLayer
@@ -174,6 +211,7 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer12 = L.tileLayer
@@ -183,6 +221,7 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer13 = L.tileLayer
@@ -192,6 +231,7 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var wmsLayer14 = L.tileLayer
@@ -201,10 +241,12 @@ module.controller('KbnMapVisController', function(
         transparent: 'true',
         format: 'image/png'
       })
+      .setOpacity(0.5)
       .addTo($scope.map);
 
     var baseLayers = {
       'Parking Areas': parkingGroup,
+      'Landscape Character': landscapeGroup,
       'Special Area of Conservation (SAC)': wmsLayer,
       'Natural Heritage Areas (NHA)': wmsLayer2,
       'Special Protection Areas (SPA)': wmsLayer3,
@@ -233,11 +275,29 @@ module.controller('KbnMapVisController', function(
     }
 
     $scope.map.on('overlayadd', function(eventLayer) {
-      $scope.addLegendToMap(eventLayer);
+      $scope.showLandscapeLegend = false;
+      $rootScope.$apply();
+
+      if (eventLayer.name == 'Landscape Areas') {
+        $scope.showLandscapeLegend = true;
+        $rootScope.$apply();
+      }
+
+      if (
+        eventLayer &&
+        eventLayer.layer._url &&
+        eventLayer.layer._url.indexOf('floodinfo.ie') == -1
+      )
+        $scope.addLegendToMap(eventLayer);
     });
 
     $scope.map.on('overlayremove', function(eventLayer) {
-      $scope.removeCurrentLegentFromMap(eventLayer);
+      if (
+        eventLayer &&
+        eventLayer.layer._url &&
+        eventLayer.layer._url.indexOf('floodinfo.ie') == -1
+      )
+        $scope.removeCurrentLegentFromMap(eventLayer);
     });
   });
 });

@@ -4,9 +4,44 @@
   id="radar-chart"
 >
   <div class="row">
-    <div id="map" style="height: 500px;"></div>
+    <div id="map" style="height: 500px;">
+      <div class="landscape-legend" ng-show="showLandscapeLegend">
+        <ul>
+          <li ng-repeat="(key, value) in landscapesColors">
+            <div ng-style="{'background-color':value.color}"></div>
+            {{ key }}
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
   <style>
+    .landscape-legend ul > li div {
+      height: 15px;
+      width: 15px;
+      float: left;
+      margin-right: 10px;
+    }
+
+    .landscape-legend ul > li {
+      font-size: 13px;
+      font-weight: 200;
+      color: #000;
+      margin-bottom: 3px;
+    }
+
+    .leaflet-top {
+      z-index: 99999999999999;
+    }
+
+    .landscape-legend {
+      position: absolute;
+      right: 10px;
+      bottom: 30px;
+      padding: 4px;
+      z-index: 99999;
+      background-color: #fff;
+    }
     .leaflet-ruler {
       height: 35px;
       width: 35px;
