@@ -54,7 +54,7 @@ For more information about any of these commands run `yarn ${task} --help`. For 
 
 ## Installing plugin
 
-- log in into you server
+- log in into your server
 - cd your_kibana_installation_path
 - if you are using docker run: docker exec -it { container_name } bash
 - install plugin by running: bin/kibana-plugin install https://github.com/CUTLER-H2020/Draxis-map-layers-kibana-plugin.git
