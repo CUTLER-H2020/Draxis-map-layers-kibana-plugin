@@ -14,7 +14,10 @@ By selecting the icon on the top right corner of the map, the user can access th
 available and then apply them as filters. Apart from the first layer that is derived from a shapefile, the
 remaining 15 layers, which concern environmental parameters, are served by WMS.
 
+More information can be found in deliverable 5.2 here: https://zenodo.org/record/3386009#.XYirMCj7RnI.
+
 ## Version
+
 - Plugin version: 0.0.10
 - Made for Kibana version: 6.5.4
 
