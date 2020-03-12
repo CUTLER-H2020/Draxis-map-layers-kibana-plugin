@@ -19,47 +19,40 @@ More information can be found in deliverable 5.2 here: https://zenodo.org/record
 ## Version
 
 - Plugin version: 0.0.10
-- Made for Kibana version: 6.5.4
+- Made for Kibana version: 7.4.0
 
-For any inquires contact Stelios Kitziris (skitziris@draxis.gr)
+For any inquires contact Stergios Bampakis (ababakis@draxis.gr) or DRAXIS Developers (dev@draxis.gr)
 
-## development
+## Plugin Creation
+This repository contains a docker-compose.yml file which helps you get this plugin as a __.zip file__ and place it in your Kibana installation (<= 7.4.0)
 
-See the [kibana contributing guide](https://github.com/elastic/kibana/blob/master/CONTRIBUTING.md) for instructions setting up your development environment. Once you have completed that, use the following yarn scripts.
+In order to get the plugin as a zip file:
 
-- `yarn kbn bootstrap`
+- Change permissions to distribution folder in order Docker to be able to copy the plugin later
+  
+  `chmod -R 0777 dist/`
+- `cd deploy/`
+- `docker-compose build`
+- `docker-compose up -d`
+- (*__Be patient__* since the whole procedure needs to download Kibana's source code and bootstrap the plugin)
+- (Optional): In case you want to see the progress of plugin building run: 
 
-  Install dependencies and crosslink Kibana and all projects/plugins.
+  `docker logs -f map-plugin-kibana`
+- The final zip is under your "/dist" directory
+ 
+Check how you can [install this zip file](#installing-markdown)
 
-  > **_IMPORTANT:_** Use this script instead of `yarn` to install dependencies when switching branches, and re-run it whenever your dependencies change.
 
-- `yarn start`
+<h2 id="installing-markdown">Installing plugin</h2>
 
-  Start kibana and have it include this plugin. You can pass any arguments that you would normally send to `bin/kibana`
+Assuming this plugin is named: "draxis_map_0.0.10.zip"
 
-  ```
-  yarn start --elasticsearch.hosts http://localhost:9220
-  ```
-
-- `yarn build`
-
-  Build a distributable archive of your plugin.
-
-- `yarn test:browser`
-
-  Run the browser tests in a real web browser.
-
-- `yarn test:server`
-
-  Run the server tests using mocha.
-
-For more information about any of these commands run `yarn ${task} --help`. For a full list of tasks checkout the `package.json` file, or run `yarn run`.
-
-## Installing plugin
-
-- log in into your server
+- Log in into your server
 - cd your_kibana_installation_path
-- if you are using docker run: docker exec -it { container_name } bash
-- install plugin by running: bin/kibana-plugin install https://github.com/CUTLER-H2020/Draxis-map-layers-kibana-plugin.git
-- this step takes about 5 minutes
-- done!
+- If you are using docker run:
+
+   `docker exec -it {container_name} bash`
+- Install plugin by running:
+
+  `bin/kibana-plugin install file:///(absolute/path/to/)draxis_map_0.0.10.zip`
+- Done !
