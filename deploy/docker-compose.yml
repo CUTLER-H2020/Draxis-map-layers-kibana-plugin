@@ -1,0 +1,10 @@
+version: '3.3'
+
+services: 
+    map-plugin-kibana:
+        build:
+            context: .
+        container_name: map-plugin-kibana
+        volumes: 
+            - '../dist:/dist' # This is where we will get the final zip
+            - '../src:/source' # This is where the plugin code should be mounted

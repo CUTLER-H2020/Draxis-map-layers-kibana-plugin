@@ -13,9 +13,9 @@
     "url": "https://github.com/zatkniz/kibana-plugins"
   },
   "scripts": {
-    "preinstall": "node ../../kibana/preinstall_check",
-    "kbn": "node ../../kibana/scripts/kbn",
-    "es": "node ../../kibana/scripts/es",
+    "preinstall": "node ../../preinstall_check",
+    "kbn": "node ../../scripts/kbn",
+    "es": "node ../../scripts/es",
     "lint": "eslint .",
     "start": "plugin-helpers start",
     "test:server": "plugin-helpers test:server",
@@ -24,9 +24,9 @@
     "seed": "node /Users/stelioskitziris/Desktop/scrapper/scrapper/elastic/elastic.2.js"
   },
   "devDependencies": {
-    "@elastic/eslint-config-kibana": "link:../../kibana/packages/eslint-config-kibana",
-    "@elastic/eslint-import-resolver-kibana": "link:../../kibana/packages/kbn-eslint-import-resolver-kibana",
-    "@kbn/plugin-helpers": "link:../../kibana/packages/kbn-plugin-helpers",
+    "@elastic/eslint-config-kibana": "link:../../packages/eslint-config-kibana",
+    "@elastic/eslint-import-resolver-kibana": "link:../../packages/kbn-eslint-import-resolver-kibana",
+    "@kbn/plugin-helpers": "link:../../packages/kbn-plugin-helpers",
     "babel-eslint": "^9.0.0",
     "eslint": "^5.6.0",
     "eslint-plugin-babel": "^5.2.0",
