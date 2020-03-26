@@ -45,7 +45,7 @@ Check how you can [install this zip file](#installing-markdown)
 
 <h2 id="installing-markdown">Installing plugin</h2>
 
-Assuming this plugin is named: "draxis_map_0.0.10.zip"
+Assuming this plugin is named: "draxis_map_0.0.2.zip"
 
 - Log in into your server
 - cd your_kibana_installation_path
@@ -54,5 +54,5 @@ Assuming this plugin is named: "draxis_map_0.0.10.zip"
    `docker exec -it {container_name} bash`
 - Install plugin by running:
 
-  `bin/kibana-plugin install file:///(absolute/path/to/)draxis_map_0.0.10.zip`
+  `bin/kibana-plugin install file:///(absolute/path/to/)draxis_map_0.0.2.zip`
 - Done !

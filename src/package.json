@@ -1,6 +1,6 @@
 {
   "name": "draxis_map",
-  "version": "0.0.10",
+  "version": "0.0.2",
   "kibana": {
     "version": "kibana"
   },

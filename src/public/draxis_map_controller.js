@@ -8,9 +8,20 @@ import { uiModules } from 'ui/modules';
 require('./scripts/core');
 require('./scripts/charts');
 require('./scripts/leaflet-measurement');
-const parkings = require('./helpers/parkings');
+// const parkings = require('./helpers/parkings');
 const landscapes = require('./helpers/landscape.js');
 const landscapesColors = require('./helpers/landscapeLegend.js');
+
+const geojsons = require('./helpers/geojsons.js');
+
+var busRouteGeoJson = geojsons.busRoute;
+var busStopsGeoJson = geojsons.busStops;
+var carParkingsGeoJson = geojsons.carParkings;
+var cycelwayGeoJson = geojsons.cycelway;
+var ferryRouteGeoJson = geojsons.ferryRoute;
+var footpathLocationGeoJson = geojsons.footpath;
+var pierUpgradeGeoJson = geojsons.pierUpgrade;
+
 // didn't already
 const module = uiModules.get('kibana/draxis_map', ['kibana']);
 
@@ -58,13 +69,13 @@ module.controller('KbnMapVisController', function(
       $scope.currentLegend.layer.options.layers
     ) {
       $scope.legend.remove();
-      $scope.map.eachLayer(function(layer) {
+      $scope.map.eachLayer(function (layer) {
         $scope.addLegendToMap({ layer: layer });
       });
     }
   };
 
-  $timeout(function() {
+  $timeout(function () {
     $scope.showLandscapeLegend = false;
 
     $scope.map = L.map('map', {
@@ -79,7 +90,13 @@ module.controller('KbnMapVisController', function(
         accessToken: 'your.mapbox.access.token'
       }
     ).addTo($scope.map);
-
+    
+    /**
+     * This is the previous implementation
+     * about car parkings. For the new shapefile of car parkings
+     * we will do it much simpler with GeoJSON function of Leaflet
+     * 
+     
     var parkingGroup = new L.FeatureGroup();
     $scope.map.addLayer(parkingGroup);
 
@@ -95,6 +112,7 @@ module.controller('KbnMapVisController', function(
       parkingGroup.addLayer(polygon);
       // $scope.map.fitBounds(polygon.getBounds());
     });
+    */
 
     var landscapeGroup = new L.FeatureGroup();
     $scope.map.addLayer(landscapeGroup);
@@ -111,6 +129,95 @@ module.controller('KbnMapVisController', function(
 
       landscapeGroup.addLayer(polygon);
     });
+    /**
+     * New layers for bus routes
+     * using Leaflet's GeoJSON instead of manual complex looping
+     */
+
+    // BUS ROUTES
+    var busRouteGroup = new L.FeatureGroup();
+    var busRouteLayer = L.geoJSON(busRouteGeoJson).addTo($scope.map);
+    busRouteGroup.addLayer(busRouteLayer);
+
+    // BUS STOP
+    var geojsonMarkerOptions = {
+      radius: 8,
+      fillColor: "#ff7800",
+      color: "#000",
+      weight: 1,
+      opacity: 1,
+      fillOpacity: 0.8
+    };
+
+    var busStopsGroup = new L.LayerGroup();
+    var busStopsLayer = L.geoJSON(busStopsGeoJson, {
+      pointToLayer: function (geoJsonPoint, latlng) {
+        return L.circleMarker(latlng, geojsonMarkerOptions)
+      }
+    }).addTo($scope.map);
+    busStopsGroup.addLayer(busStopsLayer);
+    
+    // CAR PARKINGS
+    var carParkingsGroup = new L.LayerGroup();
+    var carParkingsLayer = L.geoJSON(carParkingsGeoJson, {
+      style: {
+        "color": "#525d12",
+        "weight": 5,
+        "opacity": 0.65
+      }  
+    }).addTo($scope.map);
+    carParkingsGroup.addLayer(carParkingsLayer);
+
+    // CYCELWAY
+    var cycelwayGroup = new L.LayerGroup();
+    var cycelwayLayer = L.geoJSON(cycelwayGeoJson, {
+      style: {
+        "color": "#F08080",
+        "weight": 5,
+        "opacity": 0.65
+      }
+    }).addTo($scope.map);
+    cycelwayGroup.addLayer(cycelwayLayer);
+
+
+    // FERRY ROUTE
+    var ferryRouteGroup = new L.LayerGroup();
+    var ferryRouteLayer = L.geoJSON(ferryRouteGeoJson, {
+      style: {
+        "color": "#2AB0B9",
+        "weight": 5,
+        "opacity": 0.65
+      }
+    }).addTo($scope.map);
+    ferryRouteGroup.addLayer(ferryRouteLayer);
+
+
+    // FOOTPATH LOCATION
+    var footpathLocationGroup = new L.LayerGroup();
+    var footpathLocationLayer = L.geoJSON(footpathLocationGeoJson, {
+      style: {
+        "color": "#0E8312",
+        "weight": 5,
+        "opacity": 0.65
+      }
+    }).addTo($scope.map);
+    footpathLocationGroup.addLayer(footpathLocationLayer);
+
+
+    // PIER UPGRADE
+    var pierUpgradeGroup = new L.LayerGroup();
+    var pierUpgradeLayer = L.geoJSON(pierUpgradeGeoJson, {
+      style: {
+        "color": "#70116C",
+        "weight": 5,
+        "opacity": 0.65
+      }
+    }).addTo($scope.map);
+    pierUpgradeGroup.addLayer(pierUpgradeLayer);
+
+    /** THE FOLLOWING ARE FOR WMS.
+     *  FOR WATERBODIES WE INCLUDED UPDATED LAYERS
+    */
 
     var wmsLayer = L.tileLayer
       .wms('http://gis-stg.epa.ie/geoserver/EPA/wms?', {
@@ -141,7 +248,7 @@ module.controller('KbnMapVisController', function(
 
     var wmsLayer4 = L.tileLayer
       .wms('http://gis-stg.epa.ie/geoserver/EPA/wms?', {
-        layers: 'EPA:WFD_GWBStatus_20102015',
+        layers: 'EPA:WFD_GWBStatus_20132018',
         transparent: 'true',
         format: 'image/png'
       })
@@ -150,7 +257,7 @@ module.controller('KbnMapVisController', function(
 
     var wmsLayer5 = L.tileLayer
       .wms('http://gis-stg.epa.ie/geoserver/EPA/wms?', {
-        layers: 'EPA:WFD_LWBStatus_20102015',
+        layers: 'EPA:WFD_LWBStatus_20132018',
         transparent: 'true',
         format: 'image/png'
       })
@@ -159,7 +266,7 @@ module.controller('KbnMapVisController', function(
 
     var wmsLayer6 = L.tileLayer
       .wms('http://gis-stg.epa.ie/geoserver/EPA/wms?', {
-        layers: 'EPA:WFD_RWBStatus_20102015',
+        layers: 'EPA:WFD_RWBStatus_20132018',
         transparent: 'true',
         format: 'image/png'
       })
@@ -168,7 +275,7 @@ module.controller('KbnMapVisController', function(
 
     var wmsLayer7 = L.tileLayer
       .wms('http://gis-stg.epa.ie/geoserver/EPA/wms?', {
-        layers: 'EPA:WFD_CWBStatus_20102015',
+        layers: 'EPA:WFD_CWBStatus_20132018',
         transparent: 'true',
         format: 'image/png'
       })
@@ -177,7 +284,7 @@ module.controller('KbnMapVisController', function(
 
     var wmsLayer8 = L.tileLayer
       .wms('http://gis-stg.epa.ie/geoserver/EPA/wms?', {
-        layers: 'EPA:WFD_TransitionalWaterQuality_20102012',
+        layers: 'EPA:WFD_TWBStatus_20132018',
         transparent: 'true',
         format: 'image/png'
       })
@@ -245,16 +352,22 @@ module.controller('KbnMapVisController', function(
       .addTo($scope.map);
 
     var baseLayers = {
-      'Parking Areas': parkingGroup,
+      'Parking Areas': carParkingsGroup,
       'Landscape Character': landscapeGroup,
+      'Bus routes': busRouteGroup,
+      'Bus stops': busStopsGroup,
+      'Cycelway': cycelwayGroup,
+      'Ferry Route': ferryRouteGroup,
+      'Footpath Location': footpathLocationGroup,
+      'Pier Upgrade': pierUpgradeGroup,
       'Special Area of Conservation (SAC)': wmsLayer,
       'Natural Heritage Areas (NHA)': wmsLayer2,
       'Special Protection Areas (SPA)': wmsLayer3,
-      'Groundwater Waterbody Status (2010 – 2015)': wmsLayer4,
-      'Lake Waterbody Status (2010 – 2015)': wmsLayer5,
-      'River Waterbody Status (2010 – 2015)': wmsLayer6,
-      'Coastal Waterbodies Status (2010 – 2015)': wmsLayer7,
-      'Transitional Waterbodies (2010 – 2015)': wmsLayer8,
+      'Groundwater Waterbody Status (2013 – 2018)': wmsLayer4,
+      'Lake Waterbody Status (2013 – 2018)': wmsLayer5,
+      'River Waterbody Status (2013 – 2018)': wmsLayer6,
+      'Coastal Waterbodies Status (2013 – 2018)': wmsLayer7,
+      'Transitional Waterbodies (2013 – 2018)': wmsLayer8,
       'River Floods 0.1 % Annual Exceedance Probability (Low)': wmsLayer9,
       'River Floods 1 % Annual Exceedance Probability (Medium)': wmsLayer10,
       'River Floods 10 % Annual Exceedance Probability (High)': wmsLayer11,
@@ -270,11 +383,21 @@ module.controller('KbnMapVisController', function(
     };
     L.control.ruler(options).addTo($scope.map);
 
+    // This is for startup in order to noy apply all layers by default
     for (var name in baseLayers) {
       $scope.map.removeLayer(baseLayers[name]);
     }
-
-    $scope.map.on('overlayadd', function(eventLayer) {
+    // However the geoJSON layers aren't removed. 
+    // Explicit removal
+    $scope.map.removeLayer(busRouteLayer);
+    $scope.map.removeLayer(busStopsLayer);
+    $scope.map.removeLayer(carParkingsLayer);
+    $scope.map.removeLayer(cycelwayLayer);
+    $scope.map.removeLayer(ferryRouteLayer);
+    $scope.map.removeLayer(footpathLocationLayer);
+    $scope.map.removeLayer(pierUpgradeLayer);
+    
+    $scope.map.on('overlayadd', function (eventLayer) {
       $scope.showLandscapeLegend = false;
       $rootScope.$apply();
 
