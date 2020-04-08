@@ -2,7 +2,7 @@
 
 ## Draxis Plugin
 
-![alt text](/src/draxis_map.png)
+![alt text](/src/draxis_map_upgrade.png)
 
 ---
 
@@ -18,7 +18,7 @@ More information can be found in deliverable 5.2 here: https://zenodo.org/record
 
 ## Version
 
-- Plugin version: 0.0.10
+- Plugin version: 0.0.3
 - Made for Kibana version: 7.4.0
 
 For any inquires contact Stergios Bampakis (ababakis@draxis.gr) or DRAXIS Developers (dev@draxis.gr)

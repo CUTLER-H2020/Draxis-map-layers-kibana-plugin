@@ -17,6 +17,7 @@ const geojsons = require('./helpers/geojsons.js');
 var busRouteGeoJson = geojsons.busRoute;
 var busStopsGeoJson = geojsons.busStops;
 var carParkingsGeoJson = geojsons.carParkings;
+var evChargerGeoJson = geojsons.evChargers;
 var cycelwayGeoJson = geojsons.cycelway;
 var ferryRouteGeoJson = geojsons.ferryRoute;
 var footpathLocationGeoJson = geojsons.footpath;
@@ -179,6 +180,23 @@ module.controller('KbnMapVisController', function(
     }).addTo($scope.map);
     cycelwayGroup.addLayer(cycelwayLayer);
 
+    // EV CHARGERS
+    var evChargerGeojsonMarkerOptions = {
+      radius: 8,
+      fillColor: "#ea00ff",
+      color: "#000",
+      weight: 1,
+      opacity: 1,
+      fillOpacity: 0.8
+    };
+    
+    var evChargersGroup = new L.LayerGroup();
+    var evChargerLayer = L.geoJSON(evChargerGeoJson, {
+      pointToLayer: function (geoJsonPoint, latlng) {
+        return L.circleMarker(latlng, evChargerGeojsonMarkerOptions)
+      }
+    }).addTo($scope.map);
+    evChargersGroup.addLayer(evChargerLayer);
 
     // FERRY ROUTE
     var ferryRouteGroup = new L.LayerGroup();
@@ -357,6 +375,7 @@ module.controller('KbnMapVisController', function(
       'Bus routes': busRouteGroup,
       'Bus stops': busStopsGroup,
       'Cycelway': cycelwayGroup,
+      'Electric vehicles charging points': evChargersGroup,
       'Ferry Route': ferryRouteGroup,
       'Footpath Location': footpathLocationGroup,
       'Pier Upgrade': pierUpgradeGroup,
@@ -393,6 +412,7 @@ module.controller('KbnMapVisController', function(
     $scope.map.removeLayer(busStopsLayer);
     $scope.map.removeLayer(carParkingsLayer);
     $scope.map.removeLayer(cycelwayLayer);
+    $scope.map.removeLayer(evChargerLayer);
     $scope.map.removeLayer(ferryRouteLayer);
     $scope.map.removeLayer(footpathLocationLayer);
     $scope.map.removeLayer(pierUpgradeLayer);
