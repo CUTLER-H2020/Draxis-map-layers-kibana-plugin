@@ -39,6 +39,22 @@ module.exports.cycelway = {
     ]
 };
 
+module.exports.evChargers = {
+    "type": "FeatureCollection",
+    "name": "ev-charger",
+    "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+    "features": [
+        { "type": "Feature", "properties": { "id": 1 }, "geometry": { "type": "Point", "coordinates": [-8.308128783303806, 51.803583150314459] } },
+        { "type": "Feature", "properties": { "id": 2 }, "geometry": { "type": "Point", "coordinates": [-8.309479735833147, 51.803508355803764] } },
+        { "type": "Feature", "properties": { "id": 3 }, "geometry": { "type": "Point", "coordinates": [-8.281441741784509, 51.809362370535965] } },
+        { "type": "Feature", "properties": { "id": 4 }, "geometry": { "type": "Point", "coordinates": [-8.281309487095834, 51.808392393669756] } },
+        { "type": "Feature", "properties": { "id": 5 }, "geometry": { "type": "Point", "coordinates": [-8.280429309338539, 51.808902762006717] } },
+        { "type": "Feature", "properties": { "id": 6 }, "geometry": null },
+        { "type": "Feature", "properties": { "id": 7 }, "geometry": { "type": "Point", "coordinates": [-8.28210301522974, 51.806274726295307] } },
+        { "type": "Feature", "properties": { "id": 8 }, "geometry": { "type": "Point", "coordinates": [-8.280452111871744, 51.806184490588699] } }
+    ]
+};
+
 module.exports.ferryRoute = {
     "type": "FeatureCollection",
     "name": "ferry_route",
