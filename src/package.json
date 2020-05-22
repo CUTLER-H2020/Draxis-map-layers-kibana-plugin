@@ -1,6 +1,6 @@
 {
   "name": "draxis_map",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "kibana": {
     "version": "kibana"
   },
@@ -20,8 +20,7 @@
     "start": "plugin-helpers start",
     "test:server": "plugin-helpers test:server",
     "test:browser": "plugin-helpers test:browser",
-    "build": "plugin-helpers build",
-    "seed": "node /Users/stelioskitziris/Desktop/scrapper/scrapper/elastic/elastic.2.js"
+    "build": "plugin-helpers build"
   },
   "devDependencies": {
     "@elastic/eslint-config-kibana": "link:../../packages/eslint-config-kibana",

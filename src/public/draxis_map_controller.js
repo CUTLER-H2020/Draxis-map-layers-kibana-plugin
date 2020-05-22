@@ -100,7 +100,7 @@ module.controller('KbnMapVisController', function(
       measureControl: true
     }).setView([53.4180764, -8.6549656], 6);
     L.tileLayer(
-      'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoicm9hbWRlZiIsImEiOiJjanBpOGRjOW4wZ2p5M3ZrZ2huZ3ZmcHByIn0.GaNQw_G3SjdXA7inA1hzfQ',
+      'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaW5mby1kcmF4aXMiLCJhIjoiY2thZ2w0dW51MDduaDJ6bzU0ZmEzY3J1byJ9.s9410jErYRLvzbD7ZwANvw',
       {
         attribution: 'Draxis Maps',
         maxZoom: 18,
