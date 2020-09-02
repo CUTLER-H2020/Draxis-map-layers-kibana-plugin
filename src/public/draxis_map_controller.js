@@ -35,10 +35,11 @@ var busRouteGeoJson = geojsons.busRoute;
 var busStopsGeoJson = geojsons.busStops;
 var carParkingsGeoJson = geojsons.carParkings;
 var evChargerGeoJson = geojsons.evChargers;
-var cycelwayGeoJson = geojsons.cycelway;
 var ferryRouteGeoJson = geojsons.ferryRoute;
-var footpathLocationGeoJson = geojsons.footpath;
 var pierUpgradeGeoJson = geojsons.pierUpgrade;
+var pointRoadGeoJson = geojsons.pointRoad;
+var camdenRoadGeoJson = geojsons.camdenRoad;
+var churchGrabbalGeoJson = geojsons.churchGraballBay;
 
 // didn't already
 const module = uiModules.get('kibana/draxis_map', ['kibana']);
@@ -186,17 +187,6 @@ module.controller('KbnMapVisController', function(
     }).addTo($scope.map);
     carParkingsGroup.addLayer(carParkingsLayer);
 
-    // CYCELWAY
-    var cycelwayGroup = new L.LayerGroup();
-    var cycelwayLayer = L.geoJSON(cycelwayGeoJson, {
-      style: {
-        "color": "#F08080",
-        "weight": 5,
-        "opacity": 0.65
-      }
-    }).addTo($scope.map);
-    cycelwayGroup.addLayer(cycelwayLayer);
-
     // EV CHARGERS
     var evChargerGeojsonMarkerOptions = {
       radius: 8,
@@ -226,19 +216,6 @@ module.controller('KbnMapVisController', function(
     }).addTo($scope.map);
     ferryRouteGroup.addLayer(ferryRouteLayer);
 
-
-    // FOOTPATH LOCATION
-    var footpathLocationGroup = new L.LayerGroup();
-    var footpathLocationLayer = L.geoJSON(footpathLocationGeoJson, {
-      style: {
-        "color": "#0E8312",
-        "weight": 5,
-        "opacity": 0.65
-      }
-    }).addTo($scope.map);
-    footpathLocationGroup.addLayer(footpathLocationLayer);
-
-
     // PIER UPGRADE
     var pierUpgradeGroup = new L.LayerGroup();
     var pierUpgradeLayer = L.geoJSON(pierUpgradeGeoJson, {
@@ -249,6 +226,40 @@ module.controller('KbnMapVisController', function(
       }
     }).addTo($scope.map);
     pierUpgradeGroup.addLayer(pierUpgradeLayer);
+
+    // POINT ROAD
+    var pointRoadGroup = new L.LayerGroup();
+    var pointRoadLayer = L.geoJSON(pointRoadGeoJson, {
+      style: {
+        "color": "#CFA927",
+        "weight": 5,
+        "opacity": 0.65
+      }
+    }).addTo($scope.map);
+    pointRoadGroup.addLayer(pointRoadLayer);
+
+    // CAMDEN ROAD
+    var camdenRoadGroup = new L.LayerGroup();
+    var camdenRoadLayer = L.geoJSON(camdenRoadGeoJson, {
+      style: {
+        "color": "#8A0D15",
+        "weight": 5,
+        "opacity": 0.65
+      }
+    }).addTo($scope.map);
+    camdenRoadGroup.addLayer(camdenRoadLayer);
+
+    // CHURCH - GRABBAL ROAD
+    var churchGrabbalGroup = new L.LayerGroup();
+    var churchGrabbalLayer = L.geoJSON(churchGrabbalGeoJson, {
+      style: {
+        "color": "#0D8A0D",
+        "weight": 5,
+        "opacity": 0.65
+      }
+    }).addTo($scope.map);
+    churchGrabbalGroup.addLayer(churchGrabbalLayer);
+  
 
     /** THE FOLLOWING ARE FOR WMS.
      *  FOR WATERBODIES WE INCLUDED UPDATED LAYERS
@@ -391,11 +402,12 @@ module.controller('KbnMapVisController', function(
       'Landscape Character': landscapeGroup,
       'Bus routes': busRouteGroup,
       'Bus stops': busStopsGroup,
-      'Cycelway': cycelwayGroup,
       'Electric vehicles charging points': evChargersGroup,
       'Ferry Route': ferryRouteGroup,
-      'Footpath Location': footpathLocationGroup,
       'Pier Upgrade': pierUpgradeGroup,
+      'Point Road': pointRoadGroup,
+      'Camden Road': camdenRoadGroup,
+      'Church Bay Road and Graball Bay Beach': churchGrabbalGroup,
       'Special Area of Conservation (SAC)': wmsLayer,
       'Natural Heritage Areas (NHA)': wmsLayer2,
       'Special Protection Areas (SPA)': wmsLayer3,
@@ -428,11 +440,12 @@ module.controller('KbnMapVisController', function(
     $scope.map.removeLayer(busRouteLayer);
     $scope.map.removeLayer(busStopsLayer);
     $scope.map.removeLayer(carParkingsLayer);
-    $scope.map.removeLayer(cycelwayLayer);
     $scope.map.removeLayer(evChargerLayer);
     $scope.map.removeLayer(ferryRouteLayer);
-    $scope.map.removeLayer(footpathLocationLayer);
     $scope.map.removeLayer(pierUpgradeLayer);
+    $scope.map.removeLayer(pointRoadLayer);
+    $scope.map.removeLayer(camdenRoadLayer);
+    $scope.map.removeLayer(churchGrabbalLayer);
     
     $scope.map.on('overlayadd', function (eventLayer) {
       $scope.showLandscapeLegend = false;
